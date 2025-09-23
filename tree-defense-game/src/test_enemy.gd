@@ -1,13 +1,14 @@
-extends CharacterBody2D
+extends PathFollow2D
 
 @export var speed = 50
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+@export var hp = 5
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	get_parent().set_progress(get_parent().get_progress() + speed*delta)
-	if get_parent().get_progress_ratio() == 1:
-		queue_free()
+func _physics_process(delta: float) -> void:
+	
+	set_progress(get_progress() + speed * delta)
+	
+	if get_progress_ratio() >= 1:
+		arrive()
+		
+func arrive():
+	queue_free()
