@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bexbxi72rueou"]
+
+[ext_resource type="Script" path="res://src/test_enemy.gd" id="1_0re3m"]
+[ext_resource type="Texture2D" uid="uid://dnfqiblc5bn8k" path="res://assets/sprites/enemies/test_enemy.png" id="1_l4ps8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e8dit"]
+
+[node name="TestEnemy" type="PathFollow2D"]
+scale = Vector2(0.5, 0.5)
+h_offset = 0.25
+loop = false
+script = ExtResource("1_0re3m")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+rotation = 1.5708
+texture = ExtResource("1_l4ps8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_e8dit")
