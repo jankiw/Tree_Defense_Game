@@ -17,21 +17,24 @@ func _ready():
 	width = get_viewport().get_visible_rect().size.x / 2
 	height = get_viewport().get_visible_rect().size.y / 2
 
+#moving camera with keyboard
 func get_input():
 	var direction = Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
 	velocity = direction * move_speed
 	
 func _unhandled_input(event: InputEvent) -> void:
+	#moving camera with left mouse button
 	if event is InputEventMouseMotion:
-		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
+		if event.button_mask == MOUSE_BUTTON_MASK_LEFT || event.button_mask == MOUSE_BUTTON_MASK_MIDDLE:
 			position -= event.relative / $MainCamera.zoom
 			check_bounds()
+	#zooming camera in and out
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom_in()
-			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				zoom_out()
+			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				zoom_in()
 
 #zoom step multiplied by current zoom because otherwise zooming in at zoom 8 would be 
 #much slower than at zoom 1, for example.
@@ -47,6 +50,9 @@ func zoom_camera(delta):
 		zoom = $MainCamera.zoom[0]
 		
 	
+#compares camera position to the level's set bounds. upper bound applies to the lower edge
+#of the camera, right bound applies to the left edge, etc. Checked dynamically in case a level
+#expands the bounds.
 func check_bounds():
 	var level = get_parent()
 	if position.x + width / zoom < level.camera_left:

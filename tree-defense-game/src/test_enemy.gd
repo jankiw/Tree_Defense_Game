@@ -1,11 +1,12 @@
 extends PathFollow2D
 
-@export var speed = 50
-@export var hp = 5
+var speed = 1
+var hp = 10
 
 func _physics_process(delta: float) -> void:
 	
-	set_progress(get_progress() + speed * delta)
+	#enemy is child of path that is child of spawner
+	set_progress(get_progress() + speed * delta * $"../..".grid_size)
 	
 	if get_progress_ratio() >= 1:
 		arrive()
