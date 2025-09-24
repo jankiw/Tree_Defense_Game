@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/test_level.gd" id="1_3js8v"]
 [ext_resource type="Script" path="res://src/test_spawner.gd" id="2_6pyhn"]
 [ext_resource type="PackedScene" uid="uid://c7uhdeuv3l2xu" path="res://scenes/game/test_tile_map_layer.tscn" id="2_swsj3"]
-[ext_resource type="PackedScene" uid="uid://jki4hf4fh4rh" path="res://scenes/game/camera.tscn" id="3_epw57"]
+[ext_resource type="PackedScene" uid="uid://jki4hf4fh4rh" path="res://scenes/game/game_camera.tscn" id="3_epw57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5u2ny"]
 size = Vector2(288, 223)
@@ -21,12 +21,13 @@ script = ExtResource("1_3js8v")
 tile_map_data = PackedByteArray("AAD+//3/AAAAAAMAAAD//wEAAAABAAMAAAD///3/AAADAAAAAAAAAP3/AAADAAAAAAABAP3/AAACAAAAAAABAP7/AAADAAEAAAAEAP//AAAAAAMAAAABAP//AAAAAAEAAAADAP//AAADAAAAAAACAP//AAADAAAAAAABAAAAAAADAAEAAAABAAEAAAACAAIAAAAAAAEAAAAAAAIAAAAAAAAAAAACAAAAAAD//wAAAAAAAAAAAAAAAP//AAADAAIAAAAAAP7/AAADAAIAAAD///7/AAADAAIAAAD+//7/AAADAAIAAAD+////AAADAAIAAAD/////AAADAAIAAAD+/wAAAAADAAIAAAD+/wEAAAADAAIAAAD+/wIAAAADAAIAAAD//wIAAAADAAIAAAAAAAIAAAADAAIAAAABAAIAAAADAAIAAAACAAIAAAADAAIAAAACAAEAAAADAAIAAAACAAAAAAADAAIAAAADAAAAAAADAAIAAAADAAEAAAADAAIAAAADAAIAAAADAAIAAAAEAAIAAAADAAIAAAAEAAEAAAADAAIAAAAEAAAAAAADAAIAAAAEAP7/AAADAAIAAAADAP7/AAADAAIAAAACAP7/AAADAAIAAAAFAAIAAAADAAIAAAAFAAEAAAADAAIAAAAFAAAAAAADAAIAAAAFAP//AAADAAIAAAAFAP7/AAADAAIAAAAFAP3/AAADAAIAAAAEAP3/AAADAAIAAAADAP3/AAADAAIAAAACAP3/AAADAAIAAAAFAPz/AAADAAIAAAAEAPz/AAADAAIAAAADAPz/AAADAAIAAAACAPz/AAADAAIAAAABAPz/AAADAAIAAAAAAPz/AAADAAIAAAD///z/AAADAAIAAAD+//z/AAADAAIAAAD9//z/AAADAAIAAAD9//3/AAADAAIAAAD9//7/AAADAAIAAAD9////AAADAAIAAAD9/wAAAAADAAIAAAD9/wEAAAADAAIAAAD9/wIAAAADAAIAAAA=")
 
 [node name="Area2D" type="Area2D" parent="Map"]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Area2D"]
 position = Vector2(48, -15.5)
 shape = SubResource("RectangleShape2D_5u2ny")
 
-[node name="Camera" parent="." instance=ExtResource("3_epw57")]
+[node name="GameCamera" parent="." instance=ExtResource("3_epw57")]
 
 [node name="Spawner" type="Node" parent="."]
 script = ExtResource("2_6pyhn")
