@@ -1,41 +1,72 @@
 extends CharacterBody2D
 
 const MIN_ZOOM = 1.0
-const MAX_ZOOM = 10
+const MAX_ZOOM = 20
 
-var zoom_step = 0.2
+var zoom_step = 0.1
 var zoom_speed = 10
 var zoom = 1.0
 var target_zoom = 1.0
 
 var move_speed = 400
 
+var width
+var height
+
+func _ready():
+	width = get_viewport().get_visible_rect().size.x / 2
+	height = get_viewport().get_visible_rect().size.y / 2
+
+#moving camera with keyboard
 func get_input():
 	var direction = Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
 	velocity = direction * move_speed
 	
 func _unhandled_input(event: InputEvent) -> void:
+	#moving camera with left mouse button
 	if event is InputEventMouseMotion:
-		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
+		if event.button_mask == MOUSE_BUTTON_MASK_LEFT || event.button_mask == MOUSE_BUTTON_MASK_MIDDLE:
 			position -= event.relative / $MainCamera.zoom
+			check_bounds()
+	#zooming camera in and out
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom_in()
-			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				zoom_out()
+			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				zoom_in()
 
+#zoom step multiplied by current zoom because otherwise zooming in at zoom 8 would be 
+#much slower than at zoom 1, for example.
 func zoom_in():
-	target_zoom = max(target_zoom - zoom_step, MIN_ZOOM)
-	set_physics_process(true)
+	target_zoom = max(target_zoom - zoom_step * zoom, MIN_ZOOM)
 	
 func zoom_out():
-	target_zoom = min(target_zoom + zoom_step, MAX_ZOOM)
-	set_physics_process(true)
-	
+	target_zoom = min(target_zoom + zoom_step * zoom, MAX_ZOOM)
 
+func zoom_camera(delta):
+	if !is_equal_approx(zoom, target_zoom):
+		$MainCamera.zoom = lerp(zoom * Vector2.ONE, target_zoom * Vector2.ONE, zoom_speed * delta)
+		zoom = $MainCamera.zoom[0]
+		
+	
+#compares camera position to the level's set bounds. upper bound applies to the lower edge
+#of the camera, right bound applies to the left edge, etc. Checked dynamically in case a level
+#expands the bounds.
+func check_bounds():
+	var level = get_parent()
+	if position.x + width / zoom < level.camera_left:
+		position.x = level.camera_left - width / zoom
+	if  level.camera_right < position.x - width / zoom:
+		position.x = level.camera_right + width / zoom
+	if position.y + height / zoom < level.camera_up:
+		position.y = level.camera_up - height / zoom
+	if  level.camera_down < position.y - height / zoom:
+		position.y = level.camera_down + height / zoom
+	
+	
 func _physics_process(delta):
 	get_input()
 	move_and_slide()
-	zoom = lerp(zoom * Vector2.ONE, target_zoom * Vector2.ONE, zoom_speed * delta)
-	$MainCamera.zoom = zoom
+	zoom_camera(delta)
+	check_bounds()

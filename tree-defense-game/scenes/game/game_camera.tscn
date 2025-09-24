@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://jki4hf4fh4rh"]
 
-[ext_resource type="Script" path="res://src/camera_movement.gd" id="1_u0fjh"]
+[ext_resource type="Script" path="res://src/camera_movement.gd" id="1_p3w7g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l3pej"]
 
-[node name="Camera" type="CharacterBody2D"]
-script = ExtResource("1_u0fjh")
+[node name="GameCamera" type="CharacterBody2D"]
+script = ExtResource("1_p3w7g")
 
 [node name="MainCamera" type="Camera2D" parent="."]
 
