@@ -1,31 +1,29 @@
 extends Node
 
 var enemy = load("res://scenes/game/test_enemy.tscn")
-var instance 
 
-var wave = 0
-var last_wave
-var wave_mobs
 var mobs_left = 0
 var path
-var grid_size = 0
-	
-func start(parent_path, parent_wave_mobs):
+var grid_size
+var resource
+var seed
+var level_handler
+var path_width = 0.3
+
+func initiate(parent_path):
+	level_handler = get_parent().get_parent()
 	path = parent_path
-	wave_mobs = parent_wave_mobs
-	last_wave = len(wave_mobs)
 	#spawner is child of spawners which is a child of the level
-	grid_size = $"../..".grid_size
-	draw_path()
-	$EnemyTimer.wait_time = $"../..".spawn_delay
-	$WaveTimer.wait_time = $"../..".wave_delay
-	$WaveTimer.start()
+	grid_size = level_handler.grid_size
+	seed = level_handler.seed
+	seed(seed.hash())
+	$EnemyTimer.wait_time = level_handler.spawn_delay
 	
-func draw_path():
+func add_path(instance):
 	for point in path:
 		var x = convert_distance(point[0])
 		var y = convert_distance(point[1])
-		$Path2D.curve.add_point(Vector2(x,y))
+		instance.curve.add_point(Vector2(x,y))
 		
 func convert_distance(pos):
 	pos *= grid_size
@@ -35,16 +33,22 @@ func convert_distance(pos):
 		pos += grid_size/2
 	return pos
 	
-func _on_wave_timer_timeout():
-	mobs_left = wave_mobs[wave]
+func start_wave(resources):
+	mobs_left = resources
 	$EnemyTimer.start()
+	
+func get_offset():
+	var x = ( randi() % int(grid_size * path_width) ) - grid_size * path_width / 2
+	var y = ( randi() % int(grid_size * path_width) ) - grid_size * path_width / 2
+	return Vector2(x,y)
 
 func _on_enemy_timer_timeout():
-	instance = enemy.instantiate()
-	$Path2D.add_child(instance)
+	var instance = enemy.instantiate()
+	add_path(instance)
+	var offset = get_offset()
+	instance.position += offset
+	add_child(instance)
 	mobs_left -= 1
 	if mobs_left <= 0:
 		$EnemyTimer.stop()
-		wave += 1 
-		if wave < last_wave:
-			$WaveTimer.start()
+		level_handler.wave_finished()

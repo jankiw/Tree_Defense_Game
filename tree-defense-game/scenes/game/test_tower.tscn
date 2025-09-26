@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://hauhytu6cckm"]
+
+[ext_resource type="Texture2D" uid="uid://dm0bh303lq4mr" path="res://assets/sprites/tower_floor.png" id="1_kawen"]
+[ext_resource type="Texture2D" uid="uid://bx626vt5rya5g" path="res://assets/sprites/test_tower_1.png" id="1_ki3hd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6lhnj"]
+resource_local_to_scene = true
+radius = 8.06226
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_28a0p"]
+resource_local_to_scene = true
+radius = 48.0104
+
+[node name="TestTower" type="Area2D"]
+
+[node name="Base" type="Sprite2D" parent="."]
+texture = ExtResource("1_kawen")
+
+[node name="Tower" type="Sprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("1_ki3hd")
+
+[node name="ShootPosition" type="Node2D" parent="Tower"]
+position = Vector2(0, -9.33333)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6lhnj")
+
+[node name="AggroRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AggroRange"]
+shape = SubResource("CircleShape2D_28a0p")
+
+[node name="ShootTimer" type="Timer" parent="."]

@@ -1,20 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsqf6uqdijbp8"]
+[gd_scene load_steps=2 format=3 uid="uid://dsqf6uqdijbp8"]
 
 [ext_resource type="Script" path="res://src/spawner.gd" id="1_tjjfh"]
-
-[sub_resource type="Curve2D" id="Curve2D_5oisw"]
-resource_local_to_scene = true
 
 [node name="Spawner1" type="Node"]
 script = ExtResource("1_tjjfh")
 
 [node name="EnemyTimer" type="Timer" parent="."]
 
-[node name="WaveTimer" type="Timer" parent="."]
-one_shot = true
-
-[node name="Path2D" type="Path2D" parent="."]
-curve = SubResource("Curve2D_5oisw")
-
 [connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]
-[connection signal="timeout" from="WaveTimer" to="." method="_on_wave_timer_timeout"]

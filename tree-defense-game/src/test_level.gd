@@ -1,6 +1,7 @@
 extends Node
 
 var grid_size = 32
+var seed = "seed"
 
 var camera_left
 var camera_right
@@ -8,24 +9,37 @@ var camera_up
 var camera_down
 
 var spawn_delay = 1.0
-var wave_delay = 3.0
+var wave_delay = 5
+var spawner_delay
+var waves_finished = 0
+var towns = 2
+var spawners
 
 var paths = [
 	[[-2,-3], [2,-3], [2,2], [1,2], [1,1], [-1,1], [-1,2]],
 	[[5,-1], [2,-1], [2,2], [1,2], [1,1], [-1,1], [-1,2]]
 ]
 
-var wave_mobs = [
-	[5, 10, 15],
-	[3, 8, 13]
-]
 
-func start_spawners():
-	var spawners = $Spawners.get_children()
-	var delay = spawn_delay / len(spawners)
+func wave_finished():
+	waves_finished += 1
+	if waves_finished >= towns:
+		waves_finished = 0
+		await get_tree().create_timer(wave_delay).timeout
+		spawn_waves()
+
+func spawn_waves():
+	for spawner in spawners:
+			spawner.start_wave(5)
+			await get_tree().create_timer(spawner_delay).timeout
+
+func init_spawners():
+	waves_finished = 0
+	spawners = $Spawners.get_children()
+	spawner_delay = spawn_delay / len(spawners)
 	for i in len(spawners):
-		spawners[i].start(paths[i], wave_mobs[i])
-		await get_tree().create_timer(delay).timeout
+		spawners[i].initiate(paths[i])
+	spawn_waves()
 	
 func adjust_bounds():
 	var min_x = paths[0][0][0]
@@ -53,4 +67,4 @@ func adjust_bounds():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	adjust_bounds()
-	start_spawners()
+	init_spawners()

@@ -4,22 +4,13 @@
 [ext_resource type="PackedScene" uid="uid://c7uhdeuv3l2xu" path="res://scenes/game/test_tile_map_layer.tscn" id="2_swsj3"]
 [ext_resource type="PackedScene" uid="uid://jki4hf4fh4rh" path="res://scenes/game/game_camera.tscn" id="3_epw57"]
 [ext_resource type="PackedScene" uid="uid://dsqf6uqdijbp8" path="res://scenes/game/spawner.tscn" id="4_mkswy"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5u2ny"]
-size = Vector2(288, 223)
+[ext_resource type="PackedScene" uid="uid://hauhytu6cckm" path="res://scenes/game/test_tower.tscn" id="5_6700o"]
 
 [node name="TestLevel" type="Node"]
 script = ExtResource("1_3js8v")
 
 [node name="Map" parent="." instance=ExtResource("2_swsj3")]
 tile_map_data = PackedByteArray("AAD+//3/AAAAAAMAAAD//wEAAAABAAMAAAD///3/AAADAAAAAAAAAP3/AAADAAAAAAABAP3/AAACAAAAAAABAP7/AAADAAEAAAAEAP//AAAAAAMAAAABAP//AAAAAAEAAAADAP//AAADAAAAAAACAP//AAADAAAAAAABAAAAAAADAAEAAAABAAEAAAACAAIAAAAAAAEAAAAAAAIAAAAAAAAAAAACAAAAAAD//wAAAAAAAAAAAAAAAP//AAADAAIAAAAAAP7/AAADAAIAAAD///7/AAADAAIAAAD+//7/AAADAAIAAAD+////AAADAAIAAAD/////AAADAAIAAAD+/wAAAAADAAIAAAD+/wEAAAADAAIAAAD+/wIAAAADAAIAAAD//wIAAAADAAIAAAAAAAIAAAADAAIAAAABAAIAAAADAAIAAAACAAIAAAADAAIAAAACAAEAAAADAAIAAAACAAAAAAADAAIAAAADAAAAAAADAAIAAAADAAEAAAADAAIAAAADAAIAAAADAAIAAAAEAAIAAAADAAIAAAAEAAEAAAADAAIAAAAEAAAAAAADAAIAAAAEAP7/AAADAAIAAAADAP7/AAADAAIAAAACAP7/AAADAAIAAAAFAAIAAAADAAIAAAAFAAEAAAADAAIAAAAFAAAAAAADAAIAAAAFAP//AAADAAIAAAAFAP7/AAADAAIAAAAFAP3/AAADAAIAAAAEAP3/AAADAAIAAAADAP3/AAADAAIAAAACAP3/AAADAAIAAAAFAPz/AAADAAIAAAAEAPz/AAADAAIAAAADAPz/AAADAAIAAAACAPz/AAADAAIAAAABAPz/AAADAAIAAAAAAPz/AAADAAIAAAD///z/AAADAAIAAAD+//z/AAADAAIAAAD9//z/AAADAAIAAAD9//3/AAADAAIAAAD9//7/AAADAAIAAAD9////AAADAAIAAAD9/wAAAAADAAIAAAD9/wEAAAADAAIAAAD9/wIAAAADAAIAAAA=")
-
-[node name="Area2D" type="Area2D" parent="Map"]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Area2D"]
-position = Vector2(48, -15.5)
-shape = SubResource("RectangleShape2D_5u2ny")
 
 [node name="GameCamera" parent="." instance=ExtResource("3_epw57")]
 visible = false
@@ -29,3 +20,6 @@ visible = false
 [node name="Spawner1" parent="Spawners" instance=ExtResource("4_mkswy")]
 
 [node name="Spawner2" parent="Spawners" instance=ExtResource("4_mkswy")]
+
+[node name="TestTower" parent="." instance=ExtResource("5_6700o")]
+position = Vector2(33, 34)
