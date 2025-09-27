@@ -22,4 +22,3 @@ visible = false
 [node name="Spawner2" parent="Spawners" instance=ExtResource("4_mkswy")]
 
 [node name="TestTower" parent="." instance=ExtResource("5_6700o")]
-position = Vector2(33, 34)
