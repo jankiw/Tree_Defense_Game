@@ -1,37 +1,46 @@
 extends Node
 
-var grid_size = 32
+var grid_size: int = 32
+var seed: String
 
-var camera_left
-var camera_right
-var camera_up
-var camera_down
+var wave_delay: float = 5
+var waves_finished: int = 0
+var spawners: Array
 
-var spawn_delay = 1.0
-var wave_delay = 3.0
-
-var paths = [
-	[[-2,-3], [2,-3], [2,2], [1,2], [1,1], [-1,1], [-1,2]],
-	[[5,-1], [2,-1], [2,2], [1,2], [1,1], [-1,1], [-1,2]]
+#(0,0) is bottom right, road grid is off center.
+var paths: Array = [
+	[[-2,-3], [1,-3], [1,1], [0,1], [0,0], [-1,0], [-1,1]],
+	[[4,-1], [1,-1], [1,1], [0,1], [0,0], [-1,0], [-1,1]]
 ]
 
-var wave_mobs = [
-	[5, 10, 15],
-	[3, 8, 13]
-]
+func init(seed: String) -> void:
+	self.seed = seed
+	_adjust_bounds()
+	_init_spawners()
 
-func start_spawners():
-	var spawners = $Spawners.get_children()
-	var delay = spawn_delay / len(spawners)
+func _wave_finished() -> void:
+	waves_finished += 1
+	if waves_finished >= len(spawners):
+		waves_finished = 0
+		await get_tree().create_timer(wave_delay).timeout
+		_spawn_waves()
+
+func _spawn_waves() -> void:
+	for spawner in spawners:
+			spawner.start_wave(5)
+
+func _init_spawners() -> void:
+	spawners = $Spawners.get_children()
 	for i in len(spawners):
-		spawners[i].start(paths[i], wave_mobs[i])
-		await get_tree().create_timer(delay).timeout
+		spawners[i].initiate(paths[i], grid_size, seed)
+		spawners[i].wave_finished.connect(_wave_finished)
+	_spawn_waves()
 	
-func adjust_bounds():
-	var min_x = paths[0][0][0]
-	var max_x = paths[0][0][0]
-	var min_y = paths[0][0][1]
-	var max_y = paths[0][0][1]
+func _adjust_bounds() -> void:
+	var min_x: int = paths[0][0][0]
+	var max_x: int = paths[0][0][0]
+	var min_y: int = paths[0][0][1]
+	var max_y: int = paths[0][0][1]
 	
 	for path in paths:
 		for point in path:
@@ -44,13 +53,9 @@ func adjust_bounds():
 			if point[1] > max_y:
 				max_y = point[1]
 				
-	camera_left = (min_x + 1) * grid_size
-	camera_right = (max_x - 1) * grid_size
-	camera_up = (min_y + 1) * grid_size
-	camera_down = (max_y - 1) * grid_size
+	var left: int = (min_x + 1) * grid_size
+	var right: int = (max_x) * grid_size
+	var up: int = (min_y + 1) * grid_size
+	var down: int = (max_y) * grid_size
+	$GameCamera.set_bounds(left, right, up, down)
 			
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	adjust_bounds()
-	start_spawners()
