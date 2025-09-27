@@ -1,7 +1,11 @@
+class_name GameCamera
 extends CharacterBody2D
 
 const MIN_ZOOM: float = 1.0
 const MAX_ZOOM: float = 20
+
+const OWN_PATH: String = "res://scenes/game/game_camera.tscn"
+var is_constructed: bool = false
 
 var zoom_step: float = 0.1
 var zoom_speed: float = 10
@@ -18,6 +22,12 @@ var move_speed: float = 400
 var width: int
 var height: int
 
+static func game_camera() -> GameCamera:
+	var scene = load(OWN_PATH)
+	var game_camera: GameCamera = scene.instantiate()
+	game_camera.is_constructed = true
+	return game_camera
+
 func set_bounds(left: int, right: int, up: int, down: int) -> void:
 	left_bounds = left
 	right_bounds = right
@@ -30,6 +40,8 @@ func get_input() -> void:
 	velocity = direction * move_speed
 
 func _ready() -> void:
+	while !is_constructed:
+		pass
 	width = get_viewport().get_visible_rect().size.x / 2
 	height = get_viewport().get_visible_rect().size.y / 2
 	set_bounds(position.x, position.x, position.y, position.y)
